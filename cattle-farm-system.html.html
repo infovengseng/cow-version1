@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>养牛场管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #D2691E;
+            --light-color: #F5F5DC;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem 0;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: white;
+        }
+        
+        .cow-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .category-btn {
+            background-color: var(--light-color);
+            border: 2px solid var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .category-btn.active, .category-btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .health-good {
+            color: #28a745;
+        }
+        
+        .health-fair {
+            color: #ffc107;
+        }
+        
+        .health-poor {
+            color: #dc3545;
+        }
+        
+        .action-btn {
+            margin: 0 3px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="header text-center mb-4">
+        <div class="container">
+            <h1><i class="fas fa-cow me-2"></i>养牛场管理系统</h1>
+            <p class="lead">简单高效的牛群管理解决方案</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 统计卡片 -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card text-center p-3">
+                    <i class="fas fa-cow cow-icon"></i>
+                    <h3 id="total-cows">0</h3>
+                    <p class="mb-0">总牛数量</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white text-center p-3">
+                    <i class="fas fa-female cow-icon"></i>
+                    <h3 id="mother-cows">0</h3>
+                    <p class="mb-0">母牛数量</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white text-center p-3">
+                    <i class="fas fa-mars cow-icon"></i>
+                    <h3 id="bull-cows">0</h3>
+                    <p class="mb-0">公牛数量</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white text-center p-3">
+                    <i class="fas fa-baby cow-icon"></i>
+                    <h3 id="calf-cows">0</h3>
+                    <p class="mb-0">牛仔数量</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载提示 -->
+        <div class="loading" id="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+            <p class="mt-2">正在加载数据...</p>
+        </div>
+
+        <!-- 分类筛选 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card p-3">
+                    <h5 class="card-title">牛群分类</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn category-btn active" data-category="all">全部</button>
+                        <button class="btn category-btn" data-category="mother">母女</button>
+                        <button class="btn category-btn" data-category="bull">公牛</button>
+                        <button class="btn category-btn" data-category="calf">牛仔</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据表格 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">牛群信息</h5>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCowModal">
+                            <i class="fas fa-plus me-1"></i> 添加牛只
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>类别</th>
+                                        <th>年龄</th>
+                                        <th>健康情况</th>
+                                        <th>生产情况</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cows-table-body">
+                                    <!-- 数据将通过JavaScript动态填充 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加牛只模态框 -->
+    <div class="modal fade" id="addCowModal" tabindex="-1" aria-labelledby="addCowModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCowModalLabel">添加牛只信息</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="cow-form">
+                        <div class="mb-3">
+                            <label for="cow-id" class="form-label">牛只编号 *</label>
+                            <input type="text" class="form-control" id="cow-id" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cow-category" class="form-label">类别 *</label>
+                            <select class="form-select" id="cow-category" required>
+                                <option value="">请选择类别</option>
+                                <option value="mother">母牛</option>
+                                <option value="bull">公牛</option>
+                                <option value="calf">牛仔</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cow-age" class="form-label">年龄（月） *</label>
+                            <input type="number" class="form-control" id="cow-age" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cow-health" class="form-label">健康情况 *</label>
+                            <select class="form-select" id="cow-health" required>
+                                <option value="">请选择健康情况</option>
+                                <option value="good">良好</option>
+                                <option value="fair">一般</option>
+                                <option value="poor">较差</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cow-production" class="form-label">生产情况</label>
+                            <input type="text" class="form-control" id="cow-production">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cow-notes" class="form-label">备注</label>
+                            <textarea class="form-control" id="cow-notes" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="save-cow-btn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer text-center mt-5">
+        <div class="container">
+            <p class="mb-0">养牛场管理系统 &copy; 2023 - 使用Google Sheets作为数据存储</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 配置 - 请替换为您的Google Apps Script Web应用URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpvxYvRAuchfUPP67FGAc4o45kWI7klcCb2Hc_CPaz1cHWQEkzrpnUs1XTfzhS27eP/exec';
+        
+        // 全局变量
+        let cowsData = [];
+        
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCowsData();
+            
+            // 添加分类按钮事件
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const category = this.getAttribute('data-category');
+                    filterCows(category);
+                });
+            });
+            
+            // 保存牛只信息
+            document.getElementById('save-cow-btn').addEventListener('click', function() {
+                saveCow();
+            });
+        });
+        
+        // 从Google Sheets加载数据
+        async function loadCowsData() {
+            showLoading(true);
+            
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const result = await response.json();
+                
+                if (result.success) {
+                    cowsData = result.data;
+                    updateStats();
+                    renderCowsTable('all');
+                } else {
+                    alert('加载数据失败: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('加载数据时发生错误，请检查网络连接和脚本URL是否正确。');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // 保存牛只信息到Google Sheets
+        async function saveCow() {
+            const cowId = document.getElementById('cow-id').value;
+            const category = document.getElementById('cow-category').value;
+            const age = document.getElementById('cow-age').value;
+            const health = document.getElementById('cow-health').value;
+            const production = document.getElementById('cow-production').value;
+            const notes = document.getElementById('cow-notes').value;
+            
+            if (!cowId || !category || !age || !health) {
+                alert('请填写所有必填字段（标记*的字段）！');
+                return;
+            }
+            
+            // 检查编号是否已存在
+            if (cowsData.some(cow => cow.id === cowId)) {
+                alert('该编号已存在，请使用其他编号！');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: cowId,
+                        category: category,
+                        age: parseInt(age),
+                        health: health,
+                        production: production,
+                        notes: notes
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // 重新加载数据
+                    await loadCowsData();
+                    
+                    // 关闭模态框并重置表单
+                    document.getElementById('cow-form').reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addCowModal')).hide();
+                    
+                    alert('牛只信息已保存！');
+                } else {
+                    alert('保存失败: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('保存时发生错误，请检查网络连接。');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // 删除牛只信息
+        async function deleteCow(id) {
+            if (!confirm(`确定要删除牛只 ${id} 的信息吗？此操作不可撤销。`)) {
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                // 注意：这里需要使用Google Apps Script的doDelete函数
+                // 由于fetch不支持DELETE方法携带body，我们需要使用POST模拟DELETE
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        _method: 'DELETE', // 添加_method字段标识删除操作
+                        id: id
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // 重新加载数据
+                    await loadCowsData();
+                    alert('牛只信息已删除！');
+                } else {
+                    alert('删除失败: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('删除时发生错误，请检查网络连接。');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // 更新统计数据
+        function updateStats() {
+            const totalCows = cowsData.length;
+            const motherCows = cowsData.filter(cow => cow.category === 'mother').length;
+            const bullCows = cowsData.filter(cow => cow.category === 'bull').length;
+            const calfCows = cowsData.filter(cow => cow.category === 'calf').length;
+            
+            document.getElementById('total-cows').textContent = totalCows;
+            document.getElementById('mother-cows').textContent = motherCows;
+            document.getElementById('bull-cows').textContent = bullCows;
+            document.getElementById('calf-cows').textContent = calfCows;
+        }
+        
+        // 渲染牛只表格
+        function renderCowsTable(category) {
+            const tbody = document.getElementById('cows-table-body');
+            tbody.innerHTML = '';
+            
+            let filteredCows = cowsData;
+            if (category !== 'all') {
+                filteredCows = cowsData.filter(cow => cow.category === category);
+            }
+            
+            if (filteredCows.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="7" class="text-center">暂无数据</td>`;
+                tbody.appendChild(row);
+                return;
+            }
+            
+            filteredCows.forEach(cow => {
+                const row = document.createElement('tr');
+                
+                // 根据健康状态设置样式类
+                let healthClass = '';
+                let healthText = '';
+                if (cow.health === 'good') {
+                    healthClass = 'health-good';
+                    healthText = '良好';
+                } else if (cow.health === 'fair') {
+                    healthClass = 'health-fair';
+                    healthText = '一般';
+                } else if (cow.health === 'poor') {
+                    healthClass = 'health-poor';
+                    healthText = '较差';
+                }
+                
+                // 类别显示文本
+                let categoryText = '';
+                if (cow.category === 'mother') categoryText = '母牛';
+                else if (cow.category === 'bull') categoryText = '公牛';
+                else if (cow.category === 'calf') categoryText = '牛仔';
+                
+                row.innerHTML = `
+                    <td>${cow.id}</td>
+                    <td>${categoryText}</td>
+                    <td>${cow.age}个月</td>
+                    <td class="${healthClass}">${healthText}</td>
+                    <td>${cow.production || '-'}</td>
+                    <td>${cow.notes || '-'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger action-btn" onclick="deleteCow('${cow.id}')">
+                            <i class="fas fa-trash"></i> 删除
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        // 筛选牛只
+        function filterCows(category) {
+            renderCowsTable(category);
+        }
+        
+        // 显示/隐藏加载提示
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
