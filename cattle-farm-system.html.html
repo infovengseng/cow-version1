@@ -1,509 +1,420 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>养牛场管理系统</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #8B4513;
-            --secondary-color: #D2691E;
-            --light-color: #F5F5DC;
-        }
-        
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 1.5rem 0;
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-            margin-bottom: 20px;
-            border: none;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .stats-card {
-            background: linear-gradient(135deg, #8B4513, #A0522D);
-            color: white;
-        }
-        
-        .cow-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        .category-btn {
-            background-color: var(--light-color);
-            border: 2px solid var(--secondary-color);
-            color: var(--primary-color);
-            font-weight: bold;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        
-        .category-btn.active, .category-btn:hover {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .table th {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .health-good {
-            color: #28a745;
-        }
-        
-        .health-fair {
-            color: #ffc107;
-        }
-        
-        .health-poor {
-            color: #dc3545;
-        }
-        
-        .action-btn {
-            margin: 0 3px;
-        }
-        
-        .form-control:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.25);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-        }
-        
-        .footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem 0;
-            margin-top: 2rem;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>幸福喜事 ❤️ 婚礼长页</title>
+
+  <!-- Google font (script-free fallback if offline) -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --red:#8f1b1b;
+      --soft-red:#a92828;
+      --white:#ffffff;
+      --glass:#f2f2f2;
+      --accent:#c62828;
+      --btn-red: #ff5766;
+      --max-width:780px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: "Noto Serif SC", "Playfair Display", serif;
+      background:#fff;
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      justify-content:center;
+      padding:20px 12px;
+    }
+
+    /* Container to emulate mobile longpage */
+    .phone {
+      width:100%;
+      max-width:var(--max-width);
+      background:#fff;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 8px 30px rgba(0,0,0,0.08);
+      position:relative;
+    }
+
+    /* Top nav area like screenshot */
+    header.topbar{
+      display:flex;
+      align-items:center;
+      padding:14px 16px;
+      gap:10px;
+      border-bottom: 1px solid #faf0f0;
+    }
+    header .home{
+      width:22px;height:22px;border-radius:6px;border:1px solid #ddd;display:inline-flex;
+      align-items:center;justify-content:center;font-size:14px;color:#777;
+    }
+    header .title{
+      flex:1;text-align:center;font-weight:700;color:#111;font-size:16px;
+    }
+
+    /* hero intro */
+    .intro{
+      padding:22px 18px 10px;
+      text-align:center;
+      position:relative;
+      background:linear-gradient(180deg,#fff 0%, #fff 100%);
+    }
+    .intro .wedding{
+      font-family: "Playfair Display", serif;
+      font-size:34px;
+      color:var(--accent);
+      margin:6px 0;
+      letter-spacing:1px;
+    }
+    .intro .names{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      align-items:center;
+      margin-top:6px;
+      font-size:18px;
+      color:#222;
+    }
+    .double-hui{
+      color:var(--accent);
+      font-weight:800;
+      font-size:22px;
+      margin:0 6px;
+    }
+
+    /* section for photo + text overlay */
+    .photo-section{
+      position:relative;
+      background:var(--red);
+      padding:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .photo-card{
+      width:100%;
+      max-width:720px;
+      background:var(--red);
+      border-radius:6px;
+      overflow:hidden;
+      position:relative;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.06) inset;
+    }
+    .photo-card img{
+      display:block;
+      width:100%;
+      height:auto;
+      object-fit:cover;
+      aspect-ratio: 16/9;
+    }
+
+    /* overlay text style as in screenshot */
+    .overlay-text{
+      position:absolute;
+      right:28px;
+      top:40%;
+      transform:translateY(-50%);
+      color:#fff;
+      text-align:right;
+      font-family:"Noto Serif SC", serif;
+      text-shadow:0 2px 8px rgba(0,0,0,0.35);
+    }
+    .overlay-text .intro-small{
+      font-size:14px;
+      opacity:0.95;
+      margin-bottom:8px;
+      transform: translateX(0);
+    }
+    .overlay-text .intro-big{
+      font-size:34px;
+      letter-spacing:2px;
+    }
+
+    /* second (groom) section spacing */
+    .spacer{height:12px;background:#fff}
+
+    /* bottom controls (message input + buttons) */
+    .bottom-bar{
+      position:sticky;
+      bottom:0;
+      background:linear-gradient(180deg, rgba(255,255,255,0.9), #fff);
+      padding:12px 14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      border-top:1px solid #eee;
+    }
+    .message-input{
+      flex:1;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      background:#f4f4f4;
+      padding:8px 12px;
+      border-radius:26px;
+    }
+    .message-input input{
+      border:0;background:transparent;outline:none;font-size:14px;width:100%;
+    }
+    .btn-like{
+      width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid #eee;display:flex;
+      align-items:center;justify-content:center;font-size:18px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.06);
+    }
+    .action-buttons{
+      display:flex;gap:8px;margin-left:6px;
+    }
+    .action-buttons button{
+      border:0;padding:12px 18px;border-radius:26px;font-weight:700;
+      cursor:pointer;
+    }
+    .btn-collect{background:#fff;border:1px solid #f0c7c7;color:var(--accent)}
+    .btn-free{background:var(--btn-red);color:#fff}
+
+    /* small footer stats */
+    .meta{
+      padding:12px 16px;color:#999;font-size:13px;
+      display:flex;justify-content:space-between;align-items:center;
+    }
+
+    /* confetti canvas covers whole card area */
+    canvas.confetti{
+      position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5;
+    }
+
+    /* responsive tweaks */
+    @media (max-width:420px){
+      .intro .wedding{font-size:28px}
+      .overlay-text .intro-big{font-size:28px}
+      .overlay-text{right:16px}
+    }
+
+    /* small decorative gold particles (static fallback) */
+    .gold-fleck{
+      position:absolute;pointer-events:none;z-index:8;
+      width:6px;height:6px;background:linear-gradient(45deg,#ffd966,#ffb84d);
+      border-radius:2px;opacity:.9;mix-blend-mode:screen;
+      box-shadow:0 0 6px rgba(255,215,128,0.85);
+    }
+  </style>
 </head>
 <body>
-    <!-- 顶部导航 -->
-    <div class="header text-center mb-4">
-        <div class="container">
-            <h1><i class="fas fa-cow me-2"></i>养牛场管理系统</h1>
-            <p class="lead">简单高效的牛群管理解决方案</p>
+  <div class="phone" id="pageRoot">
+
+    <header class="topbar" aria-hidden="false">
+      <div class="home">⌂</div>
+      <div class="title">幸福喜事 ❤️ 婚礼长页</div>
+    </header>
+
+    <section class="intro">
+      <div class="wedding">Wedding Invitation</div>
+      <div class="names">
+        <div class="bride-name">美小美</div>
+        <div class="double-hui">囍</div>
+        <div class="groom-name">满小满</div>
+      </div>
+    </section>
+
+    <!-- BRIDE SECTION -->
+    <section class="photo-section">
+      <div class="photo-card" style="background:var(--red);">
+        <!-- confetti canvas covers the whole card -->
+        <canvas class="confetti" id="confettiCanvas1"></canvas>
+
+        <!-- Replace the image src (bride.jpg) with your real bride photo -->
+        <img id="bridePhoto" src="bride.jpg" alt="新娘照（替换图片）" onerror="this.style.filter='grayscale(10%)'; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=1200 height=675><rect width=100% height=100% fill=%27%238f1b1b%27/><text x=50% y=50% fill=%27%23fff%27 font-size=40 text-anchor=middle font-family=Arial>请替换为新娘照片</text></svg>';" />
+
+        <div class="overlay-text" id="brideText">
+          <div class="intro-small">“介绍一下”</div>
+          <div class="intro-big">我的太太</div>
         </div>
+      </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- GROOM SECTION -->
+    <section class="photo-section">
+      <div class="photo-card" style="background:var(--red);">
+        <canvas class="confetti" id="confettiCanvas2"></canvas>
+
+        <!-- Replace the image src (groom.jpg) with your real groom photo -->
+        <img id="groomPhoto" src="groom.jpg" alt="新郎照（替换图片）" onerror="this.style.filter='grayscale(10%)'; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=1200 height=675><rect width=100% height=100% fill=%27%238f1b1b%27/><text x=50% y=50% fill=%27%23fff%27 font-size=40 text-anchor=middle font-family=Arial>请替换为新郎照片</text></svg>';" />
+
+        <div class="overlay-text" id="groomText" style="left:28px; right: auto; text-align:left;">
+          <div class="intro-small">“介绍一下”</div>
+          <div class="intro-big">我的先生</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="meta">
+      <div>15图 | 4.6w人喜欢</div>
+      <div>2025年12月20日 · 上海外滩</div>
     </div>
 
-    <div class="container">
-        <!-- 统计卡片 -->
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="card stats-card text-center p-3">
-                    <i class="fas fa-cow cow-icon"></i>
-                    <h3 id="total-cows">0</h3>
-                    <p class="mb-0">总牛数量</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-success text-white text-center p-3">
-                    <i class="fas fa-female cow-icon"></i>
-                    <h3 id="mother-cows">0</h3>
-                    <p class="mb-0">母牛数量</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-info text-white text-center p-3">
-                    <i class="fas fa-mars cow-icon"></i>
-                    <h3 id="bull-cows">0</h3>
-                    <p class="mb-0">公牛数量</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-warning text-white text-center p-3">
-                    <i class="fas fa-baby cow-icon"></i>
-                    <h3 id="calf-cows">0</h3>
-                    <p class="mb-0">牛仔数量</p>
-                </div>
-            </div>
-        </div>
+    <div style="height:56px"></div> <!-- spacing to avoid being covered by sticky bottom -->
 
-        <!-- 加载提示 -->
-        <div class="loading" id="loading">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">加载中...</span>
-            </div>
-            <p class="mt-2">正在加载数据...</p>
-        </div>
+    <!-- bottom interactive bar -->
+    <div class="bottom-bar" id="bottomBar">
+      <div class="message-input">
+        <input id="msgInput" placeholder="祝福留言.." maxlength="120" />
+      </div>
 
-        <!-- 分类筛选 -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card p-3">
-                    <h5 class="card-title">牛群分类</h5>
-                    <div class="d-flex flex-wrap gap-2">
-                        <button class="btn category-btn active" data-category="all">全部</button>
-                        <button class="btn category-btn" data-category="mother">母女</button>
-                        <button class="btn category-btn" data-category="bull">公牛</button>
-                        <button class="btn category-btn" data-category="calf">牛仔</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div class="btn-like" id="likeBtn" title="点赞">👍<span id="likeCount" style="font-size:11px;margin-left:6px">99</span></div>
 
-        <!-- 数据表格 -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">牛群信息</h5>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCowModal">
-                            <i class="fas fa-plus me-1"></i> 添加牛只
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>编号</th>
-                                        <th>类别</th>
-                                        <th>年龄</th>
-                                        <th>健康情况</th>
-                                        <th>生产情况</th>
-                                        <th>备注</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cows-table-body">
-                                    <!-- 数据将通过JavaScript动态填充 -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div class="action-buttons">
+        <button class="btn-collect" id="collectBtn">收藏</button>
+        <button class="btn-free" id="makeBtn">免费制作</button>
+      </div>
     </div>
 
-    <!-- 添加牛只模态框 -->
-    <div class="modal fade" id="addCowModal" tabindex="-1" aria-labelledby="addCowModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addCowModalLabel">添加牛只信息</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="cow-form">
-                        <div class="mb-3">
-                            <label for="cow-id" class="form-label">牛只编号 *</label>
-                            <input type="text" class="form-control" id="cow-id" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="cow-category" class="form-label">类别 *</label>
-                            <select class="form-select" id="cow-category" required>
-                                <option value="">请选择类别</option>
-                                <option value="mother">母牛</option>
-                                <option value="bull">公牛</option>
-                                <option value="calf">牛仔</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="cow-age" class="form-label">年龄（月） *</label>
-                            <input type="number" class="form-control" id="cow-age" min="0" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="cow-health" class="form-label">健康情况 *</label>
-                            <select class="form-select" id="cow-health" required>
-                                <option value="">请选择健康情况</option>
-                                <option value="good">良好</option>
-                                <option value="fair">一般</option>
-                                <option value="poor">较差</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="cow-production" class="form-label">生产情况</label>
-                            <input type="text" class="form-control" id="cow-production">
-                        </div>
-                        <div class="mb-3">
-                            <label for="cow-notes" class="form-label">备注</label>
-                            <textarea class="form-control" id="cow-notes" rows="2"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="save-cow-btn">保存</button>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 
-    <!-- 页脚 -->
-    <footer class="footer text-center mt-5">
-        <div class="container">
-            <p class="mb-0">养牛场管理系统 &copy; 2023 - 使用Google Sheets作为数据存储</p>
-        </div>
-    </footer>
+  <script>
+    /***********************
+     * 说明：
+     * - 将 bride.jpg / groom.jpg 替换为你自己的图片路径（或 base64）。
+     * - 修改页面中的文字：新郎/新娘名字和日期/地点。
+     *
+     * 本脚本实现：
+     * 1) 右上/右侧金色飘落（canvas confetti）
+     * 2) 底部点赞计数、收藏、免费制作交互（前端模拟）
+     ***********************/
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // 配置 - 请替换为您的Google Apps Script Web应用URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpvxYvRAuchfUPP67FGAc4o45kWI7klcCb2Hc_CPaz1cHWQEkzrpnUs1XTfzhS27eP/exec';
-        
-        // 全局变量
-        let cowsData = [];
-        
-        // 初始化应用
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCowsData();
-            
-            // 添加分类按钮事件
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    const category = this.getAttribute('data-category');
-                    filterCows(category);
-                });
-            });
-            
-            // 保存牛只信息
-            document.getElementById('save-cow-btn').addEventListener('click', function() {
-                saveCow();
-            });
+    // ========== 简单 confetti（金色粒子） ==========
+    function startConfetti(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      function resize(){
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * devicePixelRatio;
+        canvas.height = rect.height * devicePixelRatio;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const particles = [];
+      const colors = [
+        '#ffd966','#ffdc7a','#ffb84d','#ffd5a6'
+      ];
+      function random(min,max){ return Math.random()*(max-min)+min }
+
+      for (let i=0;i<40;i++){
+        particles.push({
+          x: random(0, canvas.width / devicePixelRatio),
+          y: random(-200, canvas.height / devicePixelRatio),
+          r: random(2,6),
+          vy: random(0.6,2.6),
+          vx: random(-0.6,0.6),
+          rot: random(0,Math.PI*2),
+          vr: random(-0.05,0.05),
+          color: colors[Math.floor(Math.random()*colors.length)],
+          tilt: random(-0.5,0.5)
         });
-        
-        // 从Google Sheets加载数据
-        async function loadCowsData() {
-            showLoading(true);
-            
-            try {
-                const response = await fetch(SCRIPT_URL);
-                const result = await response.json();
-                
-                if (result.success) {
-                    cowsData = result.data;
-                    updateStats();
-                    renderCowsTable('all');
-                } else {
-                    alert('加载数据失败: ' + result.error);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('加载数据时发生错误，请检查网络连接和脚本URL是否正确。');
-            } finally {
-                showLoading(false);
-            }
+      }
+
+      let last = performance.now();
+      function step(now){
+        const dt = (now - last) / 16.666;
+        last = now;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        for (let p of particles){
+          p.y += p.vy * dt;
+          p.x += p.vx * dt;
+          p.rot += p.vr * dt;
+
+          // recycle
+          if (p.y > canvas.height / devicePixelRatio + 20){
+            p.y = -10;
+            p.x = random(0, canvas.width / devicePixelRatio);
+            p.vy = random(0.6,2.6);
+          }
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          // draw small rotated rectangle to mimic confetti
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.r/2, -p.r/2 + p.tilt*6, p.r, p.r*0.8);
+          ctx.restore();
         }
-        
-        // 保存牛只信息到Google Sheets
-        async function saveCow() {
-            const cowId = document.getElementById('cow-id').value;
-            const category = document.getElementById('cow-category').value;
-            const age = document.getElementById('cow-age').value;
-            const health = document.getElementById('cow-health').value;
-            const production = document.getElementById('cow-production').value;
-            const notes = document.getElementById('cow-notes').value;
-            
-            if (!cowId || !category || !age || !health) {
-                alert('请填写所有必填字段（标记*的字段）！');
-                return;
-            }
-            
-            // 检查编号是否已存在
-            if (cowsData.some(cow => cow.id === cowId)) {
-                alert('该编号已存在，请使用其他编号！');
-                return;
-            }
-            
-            showLoading(true);
-            
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        id: cowId,
-                        category: category,
-                        age: parseInt(age),
-                        health: health,
-                        production: production,
-                        notes: notes
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    // 重新加载数据
-                    await loadCowsData();
-                    
-                    // 关闭模态框并重置表单
-                    document.getElementById('cow-form').reset();
-                    bootstrap.Modal.getInstance(document.getElementById('addCowModal')).hide();
-                    
-                    alert('牛只信息已保存！');
-                } else {
-                    alert('保存失败: ' + result.error);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('保存时发生错误，请检查网络连接。');
-            } finally {
-                showLoading(false);
-            }
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // start for both cards
+    startConfetti('confettiCanvas1');
+    startConfetti('confettiCanvas2');
+
+    // ========== 底部交互逻辑（本地模拟） ==========
+    (function(){
+      const likeBtn = document.getElementById('likeBtn');
+      const likeCount = document.getElementById('likeCount');
+      const collectBtn = document.getElementById('collectBtn');
+      const makeBtn = document.getElementById('makeBtn');
+      const msgInput = document.getElementById('msgInput');
+
+      let liked=false, collected=false, likes = parseInt(likeCount.textContent) || 99;
+
+      likeBtn.addEventListener('click', ()=>{
+        if(!liked){ likes+=1; likeBtn.style.transform='scale(1.06)';}
+        else { likes-=1; likeBtn.style.transform='scale(0.96)';}
+        liked=!liked;
+        likeCount.textContent = likes;
+        setTimeout(()=>likeBtn.style.transform='scale(1)',120);
+      });
+
+      collectBtn.addEventListener('click', ()=>{
+        collected = !collected;
+        collectBtn.textContent = collected ? '已收藏' : '收藏';
+        collectBtn.style.background = collected ? '#ffdede' : '#fff';
+      });
+
+      makeBtn.addEventListener('click', ()=>{
+        // 模拟点击“免费制作”
+        alert('已进入免费制作流程（示例）。如需导出为图片/PDF，可进一步扩展。');
+      });
+
+      msgInput.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter'){
+          const v = msgInput.value.trim();
+          if(!v) return;
+          // 简单展示方式（真实项目应保存到后端）
+          alert('谢谢你的祝福：\\n' + v);
+          msgInput.value = '';
         }
-        
-        // 删除牛只信息
-        async function deleteCow(id) {
-            if (!confirm(`确定要删除牛只 ${id} 的信息吗？此操作不可撤销。`)) {
-                return;
-            }
-            
-            showLoading(true);
-            
-            try {
-                // 注意：这里需要使用Google Apps Script的doDelete函数
-                // 由于fetch不支持DELETE方法携带body，我们需要使用POST模拟DELETE
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        _method: 'DELETE', // 添加_method字段标识删除操作
-                        id: id
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    // 重新加载数据
-                    await loadCowsData();
-                    alert('牛只信息已删除！');
-                } else {
-                    alert('删除失败: ' + result.error);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('删除时发生错误，请检查网络连接。');
-            } finally {
-                showLoading(false);
-            }
-        }
-        
-        // 更新统计数据
-        function updateStats() {
-            const totalCows = cowsData.length;
-            const motherCows = cowsData.filter(cow => cow.category === 'mother').length;
-            const bullCows = cowsData.filter(cow => cow.category === 'bull').length;
-            const calfCows = cowsData.filter(cow => cow.category === 'calf').length;
-            
-            document.getElementById('total-cows').textContent = totalCows;
-            document.getElementById('mother-cows').textContent = motherCows;
-            document.getElementById('bull-cows').textContent = bullCows;
-            document.getElementById('calf-cows').textContent = calfCows;
-        }
-        
-        // 渲染牛只表格
-        function renderCowsTable(category) {
-            const tbody = document.getElementById('cows-table-body');
-            tbody.innerHTML = '';
-            
-            let filteredCows = cowsData;
-            if (category !== 'all') {
-                filteredCows = cowsData.filter(cow => cow.category === category);
-            }
-            
-            if (filteredCows.length === 0) {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="7" class="text-center">暂无数据</td>`;
-                tbody.appendChild(row);
-                return;
-            }
-            
-            filteredCows.forEach(cow => {
-                const row = document.createElement('tr');
-                
-                // 根据健康状态设置样式类
-                let healthClass = '';
-                let healthText = '';
-                if (cow.health === 'good') {
-                    healthClass = 'health-good';
-                    healthText = '良好';
-                } else if (cow.health === 'fair') {
-                    healthClass = 'health-fair';
-                    healthText = '一般';
-                } else if (cow.health === 'poor') {
-                    healthClass = 'health-poor';
-                    healthText = '较差';
-                }
-                
-                // 类别显示文本
-                let categoryText = '';
-                if (cow.category === 'mother') categoryText = '母牛';
-                else if (cow.category === 'bull') categoryText = '公牛';
-                else if (cow.category === 'calf') categoryText = '牛仔';
-                
-                row.innerHTML = `
-                    <td>${cow.id}</td>
-                    <td>${categoryText}</td>
-                    <td>${cow.age}个月</td>
-                    <td class="${healthClass}">${healthText}</td>
-                    <td>${cow.production || '-'}</td>
-                    <td>${cow.notes || '-'}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger action-btn" onclick="deleteCow('${cow.id}')">
-                            <i class="fas fa-trash"></i> 删除
-                        </button>
-                    </td>
-                `;
-                
-                tbody.appendChild(row);
-            });
-        }
-        
-        // 筛选牛只
-        function filterCows(category) {
-            renderCowsTable(category);
-        }
-        
-        // 显示/隐藏加载提示
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-        }
-    </script>
+      });
+    })();
+
+    // ========== 可编程文本（如果需要改名字/日期，可在此修改） ==========
+    (function(){
+      // 如果你要程序化替换文本，直接在这里改
+      const brideName = '美小美';
+      const groomName = '满小满';
+      const datePlace = '2025年12月20日 · 上海外滩';
+
+      document.querySelector('.bride-name').textContent = brideName;
+      document.querySelector('.groom-name').textContent = groomName;
+      document.querySelector('.meta div:last-child').textContent = datePlace;
+      // overlay big text 可按照需要替换
+      document.querySelector('#brideText .intro-big').textContent = '我的太太';
+      document.querySelector('#groomText .intro-big').textContent = '我的先生';
+    })();
+
+  </script>
 </body>
 </html>
