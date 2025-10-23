@@ -1,401 +1,457 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="km">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>幸福喜事 ❤️ 婚礼长页</title>
-
-  <!-- Google font (script-free fallback if offline) -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      --red:#8f1b1b;
-      --soft-red:#a92828;
-      --white:#ffffff;
-      --glass:#f2f2f2;
-      --accent:#c62828;
-      --btn-red: #ff5766;
-      --max-width:780px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;}
-    body{
-      margin:0;
-      font-family: "Noto Serif SC", "Playfair Display", serif;
-      background:#fff;
-      color:#222;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      display:flex;
-      justify-content:center;
-      padding:20px 12px;
-    }
-
-    /* Container to emulate mobile longpage */
-    .phone {
-      width:100%;
-      max-width:var(--max-width);
-      background:#fff;
-      border-radius:16px;
-      overflow:hidden;
-      box-shadow:0 8px 30px rgba(0,0,0,0.08);
-      position:relative;
-    }
-
-    /* Top nav area like screenshot */
-    header.topbar{
-      display:flex;
-      align-items:center;
-      padding:14px 16px;
-      gap:10px;
-      border-bottom: 1px solid #faf0f0;
-    }
-    header .home{
-      width:22px;height:22px;border-radius:6px;border:1px solid #ddd;display:inline-flex;
-      align-items:center;justify-content:center;font-size:14px;color:#777;
-    }
-    header .title{
-      flex:1;text-align:center;font-weight:700;color:#111;font-size:16px;
-    }
-
-    /* hero intro */
-    .intro{
-      padding:22px 18px 10px;
-      text-align:center;
-      position:relative;
-      background:linear-gradient(180deg,#fff 0%, #fff 100%);
-    }
-    .intro .wedding{
-      font-family: "Playfair Display", serif;
-      font-size:34px;
-      color:var(--accent);
-      margin:6px 0;
-      letter-spacing:1px;
-    }
-    .intro .names{
-      display:flex;
-      justify-content:center;
-      gap:12px;
-      align-items:center;
-      margin-top:6px;
-      font-size:18px;
-      color:#222;
-    }
-    .double-hui{
-      color:var(--accent);
-      font-weight:800;
-      font-size:22px;
-      margin:0 6px;
-    }
-
-    /* section for photo + text overlay */
-    .photo-section{
-      position:relative;
-      background:var(--red);
-      padding:18px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .photo-card{
-      width:100%;
-      max-width:720px;
-      background:var(--red);
-      border-radius:6px;
-      overflow:hidden;
-      position:relative;
-      box-shadow: 0 2px 0 rgba(0,0,0,0.06) inset;
-    }
-    .photo-card img{
-      display:block;
-      width:100%;
-      height:auto;
-      object-fit:cover;
-      aspect-ratio: 16/9;
-    }
-
-    /* overlay text style as in screenshot */
-    .overlay-text{
-      position:absolute;
-      right:28px;
-      top:40%;
-      transform:translateY(-50%);
-      color:#fff;
-      text-align:right;
-      font-family:"Noto Serif SC", serif;
-      text-shadow:0 2px 8px rgba(0,0,0,0.35);
-    }
-    .overlay-text .intro-small{
-      font-size:14px;
-      opacity:0.95;
-      margin-bottom:8px;
-      transform: translateX(0);
-    }
-    .overlay-text .intro-big{
-      font-size:34px;
-      letter-spacing:2px;
-    }
-
-    /* second (groom) section spacing */
-    .spacer{height:12px;background:#fff}
-
-    /* bottom controls (message input + buttons) */
-    .bottom-bar{
-      position:sticky;
-      bottom:0;
-      background:linear-gradient(180deg, rgba(255,255,255,0.9), #fff);
-      padding:12px 14px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      border-top:1px solid #eee;
-    }
-    .message-input{
-      flex:1;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      background:#f4f4f4;
-      padding:8px 12px;
-      border-radius:26px;
-    }
-    .message-input input{
-      border:0;background:transparent;outline:none;font-size:14px;width:100%;
-    }
-    .btn-like{
-      width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid #eee;display:flex;
-      align-items:center;justify-content:center;font-size:18px;
-      box-shadow:0 3px 10px rgba(0,0,0,0.06);
-    }
-    .action-buttons{
-      display:flex;gap:8px;margin-left:6px;
-    }
-    .action-buttons button{
-      border:0;padding:12px 18px;border-radius:26px;font-weight:700;
-      cursor:pointer;
-    }
-    .btn-collect{background:#fff;border:1px solid #f0c7c7;color:var(--accent)}
-    .btn-free{background:var(--btn-red);color:#fff}
-
-    /* small footer stats */
-    .meta{
-      padding:12px 16px;color:#999;font-size:13px;
-      display:flex;justify-content:space-between;align-items:center;
-    }
-
-    /* confetti canvas covers whole card area */
-    canvas.confetti{
-      position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5;
-    }
-
-    /* responsive tweaks */
-    @media (max-width:420px){
-      .intro .wedding{font-size:28px}
-      .overlay-text .intro-big{font-size:28px}
-      .overlay-text{right:16px}
-    }
-
-    /* small decorative gold particles (static fallback) */
-    .gold-fleck{
-      position:absolute;pointer-events:none;z-index:8;
-      width:6px;height:6px;background:linear-gradient(45deg,#ffd966,#ffb84d);
-      border-radius:2px;opacity:.9;mix-blend-mode:screen;
-      box-shadow:0 0 6px rgba(255,215,128,0.85);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>មង្គលការ វេងសេង ❤ សុភីនឹត</title>
+    <style>
+        /* Import Khmer Font */
+        @font-face {
+            font-family: 'Kh BL LazySmooth';
+            src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer&display=swap');
+            font-display: swap;
+        }
+        
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Kh BL LazySmooth', 'Noto Sans Khmer', sans-serif;
+            background-color: #f9f5f0;
+            color: #5a3e36;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        section {
+            min-height: 100vh;
+            width: 100%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1, h2, h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #8b4513;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Star Animation */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: fall linear forwards;
+            opacity: 0.8;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        /* Section 1 Styles */
+        .section-1 {
+            background: linear-gradient(to bottom, #fef7e5, #f5e8d3);
+        }
+        
+        .title-main {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .couple-names {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .bride-container, .groom-container {
+            position: relative;
+            width: 100%;
+            margin: 1rem 0;
+        }
+        
+        .bride-text, .groom-text {
+            position: absolute;
+            font-size: 1.8rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1rem;
+            background-color: rgba(139, 69, 19, 0.6);
+            border-radius: 5px;
+        }
+        
+        .bride-text {
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+        }
+        
+        .groom-text {
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+        }
+        
+        /* Section 2 Styles */
+        .section-2 {
+            background: linear-gradient(to bottom, #f5e8d3, #e8d9c5);
+        }
+        
+        .invitation-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .meeting-text {
+            font-size: 1.5rem;
+            margin: 2rem 0;
+            font-weight: bold;
+        }
+        
+        .welcome-image {
+            width: 80%;
+            max-width: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .welcome-text {
+            font-size: 1.8rem;
+            margin-top: 1rem;
+            color: #8b4513;
+        }
+        
+        /* Section 3 Styles */
+        .section-3 {
+            background: linear-gradient(to bottom, #e8d9c5, #dcc9b0);
+        }
+        
+        .section-3 img {
+            margin: 1rem 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Section 4 & 5 Styles */
+        .section-4, .section-5 {
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .full-image {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+        }
+        
+        /* Section 6 & 7 Styles */
+        .section-6, .section-7 {
+            background: linear-gradient(to bottom, #dcc9b0, #cdba96);
+        }
+        
+        /* Section 8 Styles */
+        .section-8 {
+            background: linear-gradient(to bottom, #cdba96, #beaa82);
+        }
+        
+        .wedding-date {
+            font-size: 1.8rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Section 9 Styles */
+        .section-9 {
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .countdown-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .countdown-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+        }
+        
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+        }
+        
+        .address {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title-main {
+                font-size: 2rem;
+            }
+            
+            .couple-names {
+                font-size: 1.5rem;
+            }
+            
+            .bride-text, .groom-text {
+                font-size: 1.5rem;
+            }
+            
+            .invitation-text {
+                font-size: 1rem;
+            }
+            
+            .meeting-text {
+                font-size: 1.2rem;
+            }
+            
+            .welcome-text {
+                font-size: 1.5rem;
+            }
+            
+            .wedding-date {
+                font-size: 1.5rem;
+            }
+            
+            .countdown-title {
+                font-size: 1.2rem;
+            }
+            
+            .countdown-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="phone" id="pageRoot">
-
-    <header class="topbar" aria-hidden="false">
-      <div class="home">⌂</div>
-      <div class="title">Vengseng ❤️ Sophinoet</div>
-    </header>
-
-    <section class="intro">
-      <div class="wedding">Wedding Invitation</div>
-      <div class="names">
-        <div class="bride-name">Sea Vengseng</div>
-        <div class="double-hui">囍</div>
-        <div class="groom-name">Teng Sophinoet</div>
-      </div>
-    </section>
-
-    <!-- BRIDE SECTION -->
-    <section class="photo-section">
-      <div class="photo-card" style="background:var(--red);">
-        <!-- confetti canvas covers the whole card -->
-        <canvas class="confetti" id="confettiCanvas1"></canvas>
-
-        <!-- Replace the image src (bride.jpg) with your real bride photo -->
-        <img id="bridePhoto" src="bride.jpg" alt="新娘照（替换图片）" onerror="this.style.filter='grayscale(10%)'; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=1200 height=675><rect width=100% height=100% fill=%27%238f1b1b%27/><text x=50% y=50% fill=%27%23fff%27 font-size=40 text-anchor=middle font-family=Arial>请替换为新娘照片</text></svg>';" />
-
-        <div class="overlay-text" id="brideText">
-          <div class="intro-small">“介绍一下”</div>
-          <div class="intro-big">我的太太</div>
+    <!-- Star Animation Container -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Section 1 -->
+    <section class="section-1">
+        <h1 class="title-main">ពិធីមង្គលការ</h1>
+        <h2 class="couple-names">ស៊ា វេងសេង ❤ តេងសុភីនឹត</h2>
+        
+        <div class="bride-container">
+            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Bride">
+            <div class="bride-text">កូនក្រមុំ</div>
         </div>
-      </div>
-    </section>
-
-    <div class="spacer"></div>
-
-    <!-- GROOM SECTION -->
-    <section class="photo-section">
-      <div class="photo-card" style="background:var(--red);">
-        <canvas class="confetti" id="confettiCanvas2"></canvas>
-
-        <!-- Replace the image src (groom.jpg) with your real groom photo -->
-        <img id="groomPhoto" src="groom.jpg" alt="新郎照（替换图片）" onerror="this.style.filter='grayscale(10%)'; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=1200 height=675><rect width=100% height=100% fill=%27%238f1b1b%27/><text x=50% y=50% fill=%27%23fff%27 font-size=40 text-anchor=middle font-family=Arial>请替换为新郎照片</text></svg>';" />
-
-        <div class="overlay-text" id="groomText" style="left:28px; right: auto; text-align:left;">
-          <div class="intro-small">“介绍一下”</div>
-          <div class="intro-big">我的先生</div>
+        
+        <div class="groom-container">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Groom">
+            <div class="groom-text">កូនកំលោះ</div>
         </div>
-      </div>
+    </section>
+    
+    <!-- Section 2 -->
+    <section class="section-2">
+        <p class="invitation-text">
+            សូមគោរពអញ្ជើញ<br>
+            សម្ដេច ឯកឧត្តម លោកជំទាវ ឧកញ្ញា អ្នកឧកញ្ញា លោក លោកស្រី<br>
+            ចូលរួមពិធីមង្គលការយើងខ្ញុំទាំងពីរ!
+        </p>
+        
+        <h3 class="meeting-text">ជួបគ្នាថ្ងៃមង្គលយើងខ្ញុំទាំងអស់គ្នា</h3>
+        
+        <div class="welcome-image">
+            <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Wedding venue">
+        </div>
+        
+        <h2 class="welcome-text">Welcome to Our Wedding</h2>
+    </section>
+    
+    <!-- Section 3 -->
+    <section class="section-3">
+        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Couple photo 1">
+        <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Couple photo 2">
+        <p>
+            ពួកយើងជួបគ្នាក្នុងពិធីមួយដែលពេញដោយសេចក្ដីស្រលាញ់ និងក្តីសង្ឃឹម។ 
+            ពួកយើងសូមអរគុណចំពោះការចូលរួមរបស់អ្នកទាំងអស់គ្នា។
+        </p>
+    </section>
+    
+    <!-- Section 4 -->
+    <section class="section-4">
+        <img class="full-image" src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Wedding decoration">
+    </section>
+    
+    <!-- Section 5 -->
+    <section class="section-5">
+        <img class="full-image" src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1349&q=80" alt="Wedding rings">
+    </section>
+    
+    <!-- Section 6 -->
+    <section class="section-6">
+        <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Wedding ceremony">
+        <p>
+            ពួកយើងរីករាយយ៉ាងខ្លាំងដែលបានជួបគ្នា និងសម្រេចចិត្តរស់នៅជាមួយគ្នារហូតដល់ចុងបញ្ចប់នៃជីវិត។
+        </p>
+    </section>
+    
+    <!-- Section 7 -->
+    <section class="section-7">
+        <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Bride and groom">
+        <p>
+            សូមជួយផ្ដល់ពរជ័យដល់ពួកយើងក្នុងការចាប់ផ្ដើមដំណើរជីវិតថ្មីនេះ។
+        </p>
+    </section>
+    
+    <!-- Section 8 -->
+    <section class="section-8">
+        <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Wedding date">
+        <div class="wedding-date">
+            <h3>ថ្ងៃមង្គលការយើងខ្ញុំ</h3>
+            <p>January 31, 2025</p>
+        </div>
+    </section>
+    
+    <!-- Section 9 -->
+    <section class="section-9">
+        <img class="full-image" src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Countdown background">
+        <div class="countdown-container">
+            <h3 class="countdown-title">Our Wedding will Start on</h3>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">00</div>
+                    <div class="countdown-label">ថ្ងៃ</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">00</div>
+                    <div class="countdown-label">ម៉ោង</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">00</div>
+                    <div class="countdown-label">នាទី</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">00</div>
+                    <div class="countdown-label">វិនាទី</div>
+                </div>
+            </div>
+            <div class="address">
+                <p>វេទិកាសំរិទ្ធិ<br>ផ្លូវវត្តភ្នំ, រាជធានីភ្នំពេញ</p>
+            </div>
+        </div>
     </section>
 
-  </div>
-
-  <script>
-    /***********************
-     * 说明：
-     * - 将 bride.jpg / groom.jpg 替换为你自己的图片路径（或 base64）。
-     * - 修改页面中的文字：新郎/新娘名字和日期/地点。
-     *
-     * 本脚本实现：
-     * 1) 右上/右侧金色飘落（canvas confetti）
-     * 2) 底部点赞计数、收藏、免费制作交互（前端模拟）
-     ***********************/
-
-    // ========== 简单 confetti（金色粒子） ==========
-    function startConfetti(canvasId) {
-      const canvas = document.getElementById(canvasId);
-      if(!canvas) return;
-      const ctx = canvas.getContext('2d');
-      function resize(){
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * devicePixelRatio;
-        canvas.height = rect.height * devicePixelRatio;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = rect.height + 'px';
-        ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-      }
-      resize();
-      window.addEventListener('resize', resize);
-
-      const particles = [];
-      const colors = [
-        '#ffd966','#ffdc7a','#ffb84d','#ffd5a6'
-      ];
-      function random(min,max){ return Math.random()*(max-min)+min }
-
-      for (let i=0;i<40;i++){
-        particles.push({
-          x: random(0, canvas.width / devicePixelRatio),
-          y: random(-200, canvas.height / devicePixelRatio),
-          r: random(2,6),
-          vy: random(0.6,2.6),
-          vx: random(-0.6,0.6),
-          rot: random(0,Math.PI*2),
-          vr: random(-0.05,0.05),
-          color: colors[Math.floor(Math.random()*colors.length)],
-          tilt: random(-0.5,0.5)
+    <script>
+        // Create falling stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position and animation
+                const left = Math.random() * 100;
+                const top = Math.random() * -100;
+                const duration = Math.random() * 5 + 5;
+                const delay = Math.random() * 5;
+                
+                star.style.left = `${left}%`;
+                star.style.top = `${top}%`;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Countdown timer
+        function updateCountdown() {
+            const weddingDate = new Date('January 31, 2025 00:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = weddingDate - now;
+            
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
         });
-      }
-
-      let last = performance.now();
-      function step(now){
-        const dt = (now - last) / 16.666;
-        last = now;
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-
-        for (let p of particles){
-          p.y += p.vy * dt;
-          p.x += p.vx * dt;
-          p.rot += p.vr * dt;
-
-          // recycle
-          if (p.y > canvas.height / devicePixelRatio + 20){
-            p.y = -10;
-            p.x = random(0, canvas.width / devicePixelRatio);
-            p.vy = random(0.6,2.6);
-          }
-
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.rot);
-          // draw small rotated rectangle to mimic confetti
-          ctx.fillStyle = p.color;
-          ctx.fillRect(-p.r/2, -p.r/2 + p.tilt*6, p.r, p.r*0.8);
-          ctx.restore();
-        }
-        requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
-
-    // start for both cards
-    startConfetti('confettiCanvas1');
-    startConfetti('confettiCanvas2');
-
-    // ========== 底部交互逻辑（本地模拟） ==========
-    (function(){
-      const likeBtn = document.getElementById('likeBtn');
-      const likeCount = document.getElementById('likeCount');
-      const collectBtn = document.getElementById('collectBtn');
-      const makeBtn = document.getElementById('makeBtn');
-      const msgInput = document.getElementById('msgInput');
-
-      let liked=false, collected=false, likes = parseInt(likeCount.textContent) || 99;
-
-      likeBtn.addEventListener('click', ()=>{
-        if(!liked){ likes+=1; likeBtn.style.transform='scale(1.06)';}
-        else { likes-=1; likeBtn.style.transform='scale(0.96)';}
-        liked=!liked;
-        likeCount.textContent = likes;
-        setTimeout(()=>likeBtn.style.transform='scale(1)',120);
-      });
-
-      collectBtn.addEventListener('click', ()=>{
-        collected = !collected;
-        collectBtn.textContent = collected ? '已收藏' : '收藏';
-        collectBtn.style.background = collected ? '#ffdede' : '#fff';
-      });
-
-      makeBtn.addEventListener('click', ()=>{
-        // 模拟点击“免费制作”
-        alert('已进入免费制作流程（示例）。如需导出为图片/PDF，可进一步扩展。');
-      });
-
-      msgInput.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter'){
-          const v = msgInput.value.trim();
-          if(!v) return;
-          // 简单展示方式（真实项目应保存到后端）
-          alert('谢谢你的祝福：\\n' + v);
-          msgInput.value = '';
-        }
-      });
-    })();
-
-    // ========== 可编程文本（如果需要改名字/日期，可在此修改） ==========
-    (function(){
-      // 如果你要程序化替换文本，直接在这里改
-      const brideName = '美小美';
-      const groomName = '满小满';
-      const datePlace = '2025年12月20日 · 上海外滩';
-
-      document.querySelector('.bride-name').textContent = brideName;
-      document.querySelector('.groom-name').textContent = groomName;
-      document.querySelector('.meta div:last-child').textContent = datePlace;
-      // overlay big text 可按照需要替换
-      document.querySelector('#brideText .intro-big').textContent = '我的太太';
-      document.querySelector('#groomText .intro-big').textContent = '我的先生';
-    })();
-
-  </script>
+    </script>
 </body>
 </html>
-
-
